@@ -1,5 +1,4 @@
 //Define variables
-
 var wordOptionsArray = ["Kawhi Leonard", "Dwight Howard", "Dominique Wilkins", "Reggie Miller", "Ray Allen", "Bob Pettit", "Kevin McHale", "George Gervin", "Gary Payton", "Elvin Hayes", "Dolph Schayes", "Rick Berry", "Paul Pierce", "George Mikan", "Bob Cousy", "Isiah Thomas", "Allen Iverson", "John Havlicek", "Walt Frazier", "Patrick Ewing", "Clyde Drexler", "Jason Kidd", "Steve Nash", "David Robinson", "Elgin Baylor", "Dwyane Wade", "Kevin Durant", "John Stockton", "Scottie Pippen", "Chris Paul", "Charles Barkley", "Stephen Curry", "Julius Erving", "Dirk Nowitzski", "Karl Malone", "Kevin Garnett", "Moses Malone", "Jerry West", "Oscar Robertson", "Hakeem Olajuwon", "Kobe Bryant", "Shaquille O'Neal", "Larry Bird", "Tim Duncan", "Bill Russell", "Kareem Abdul-Jabbar", "Magic Johnson", "Wilt Chamberlain", "LeBron James", "Michael Jordan"];
 var alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
 var correctGuessArray = [];
@@ -13,8 +12,18 @@ var lettersArray = computerGuess.split("");
 var startingLetters = "_".repeat(computerGuess.length);
 var startingLettersArray = startingLetters.split("");
 
-
-console.log(lettersArray);
+var initializeGame = function() {
+	wordOptionsArray = ["Kawhi Leonard", "Dwight Howard", "Dominique Wilkins", "Reggie Miller", "Ray Allen", "Bob Pettit", "Kevin McHale", "George Gervin", "Gary Payton", "Elvin Hayes", "Dolph Schayes", "Rick Berry", "Paul Pierce", "George Mikan", "Bob Cousy", "Isiah Thomas", "Allen Iverson", "John Havlicek", "Walt Frazier", "Patrick Ewing", "Clyde Drexler", "Jason Kidd", "Steve Nash", "David Robinson", "Elgin Baylor", "Dwyane Wade", "Kevin Durant", "John Stockton", "Scottie Pippen", "Chris Paul", "Charles Barkley", "Stephen Curry", "Julius Erving", "Dirk Nowitzski", "Karl Malone", "Kevin Garnett", "Moses Malone", "Jerry West", "Oscar Robertson", "Hakeem Olajuwon", "Kobe Bryant", "Shaquille O'Neal", "Larry Bird", "Tim Duncan", "Bill Russell", "Kareem Abdul-Jabbar", "Magic Johnson", "Wilt Chamberlain", "LeBron James", "Michael Jordan"];
+	alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+	correctGuessArray = [];
+	incorrectGuessArray = [];
+	guesses = 10;
+	computerGuess = wordOptionsArray[Math.floor(Math.random() * wordOptionsArray.length)];
+	computerGuess = computerGuess.toLowerCase();
+	lettersArray = computerGuess.split("");
+	startingLetters = "_".repeat(computerGuess.length);
+	startingLettersArray = startingLetters.split("");
+};
 
 
 //Begin function on key release
@@ -54,7 +63,12 @@ document.onkeyup = function(event) {
 			for(var i =0; i < lettersArray.length; i++) {
 				if(lettersArray[i] === " ") {
 					startingLettersArray[i] = "\xa0\xa0\xa0";
-				} else if(lettersArray[i] === userGuess) {
+				} else if(lettersArray[i] === "-") {
+					startingLettersArray[i] = "-";
+				} else if(lettersArray[i] === "'") {
+					startingLettersArray[i] = "'";
+				}
+				else if(lettersArray[i] === userGuess) {
 					startingLettersArray[i] = userGuess;
 				} 
 				//
@@ -63,24 +77,27 @@ document.onkeyup = function(event) {
 
 
 			}
-						
+	//if guesses drop to 0			
 	if(guesses === 0) {
 		losses++;
+		initializeGame();
 	}
 
+	//if there are no more underscores in startingLettersArray
 	if(!startingLettersArray.includes("_")) {
 		wins++;
+		initializeGame();
 	}
 
+	//html to be inserted
 	var html = endingLetters.toUpperCase() + "<br><br>" +
 	"<p>Letters Already Guessed: " + incorrectGuessesEnd.toUpperCase() + "</p><br>" +
+	"<p>Guesses Left: " + guesses + "</p><br>" +
 	"<p>Wins: " + wins + "</p><br>" +
-	"<p>Losses: " + losses + "</p><br>";
+	"<p>Losses: " + losses + "</p>";
 
-
+	
     document.querySelector("#game").innerHTML = html;	
 
-	console.log(wins);
-	console.log(losses);
 
 };
